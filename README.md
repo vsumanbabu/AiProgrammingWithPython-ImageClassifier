@@ -2,15 +2,14 @@
 README
 # **Transfer Learning for Image Classification**
 
-![Cover](./assets/cover.png)
 
 ---
 
 ## Overview
 
-Going forward, AI algorithms will be incorporated into more and more everyday applications. For example, you might want to include an image classifier in a smart phone app. To do this, you'd use a deep learning model trained on hundreds of thousands of images as part of the overall application architecture. A large part of software development in the future will be using these types of models as common parts of applications. 
+Going forward, AI algorithms will be incorporated into more and more everyday applications. For example, you might want to include an image classifier in a smart phone app. To do this, you'd use a deep learning model trained on hundreds of thousands of images as part of the overall application architecture. A large part of software development in the future will be using these types of models as common parts of applications.
 
-In this project, you'll train an image classifier to recognize different species of flowers. You can imagine using something like this in a phone app that tells you the name of the flower your camera is looking at. In practice you'd train this classifier, then export it for use in your application. We'll be using [this dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html) of 102 flower categories, you can see a few examples below. 
+In this project, you'll train an image classifier to recognize different species of flowers. You can imagine using something like this in a phone app that tells you the name of the flower your camera is looking at. In practice you'd train this classifier, then export it for use in your application. We'll be using [this dataset](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html) of 102 flower categories, you can see a few examples below.
 
 
 The project is broken down into multiple steps:
@@ -90,7 +89,7 @@ data_transforms = {
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
      ])
 }
-    
+
 # Load the datasets with ImageFolder
 image_datasets = {
     x: datasets.ImageFolder(root=data_dir + '/' + x, transform=data_transforms[x])
@@ -178,72 +177,72 @@ model = train.train_model(image_datasets, arch='alexnet', gpu=True, epochs=14, h
     ----------
     train Loss: 4.5515 Acc: 0.0333
     valid Loss: 3.8531 Acc: 0.2098
-    
+
     Epoch 2/14
     ----------
     train Loss: 3.7148 Acc: 0.1392
     valid Loss: 2.8058 Acc: 0.3029
-    
+
     Epoch 3/14
     ----------
     train Loss: 2.9810 Acc: 0.2500
     valid Loss: 2.1294 Acc: 0.4520
-    
+
     Epoch 4/14
     ----------
     train Loss: 2.6074 Acc: 0.3294
     valid Loss: 1.8415 Acc: 0.5294
-    
+
     Epoch 5/14
     ----------
     train Loss: 2.2126 Acc: 0.4127
     valid Loss: 1.6776 Acc: 0.5392
-    
+
     Epoch 6/14
     ----------
     train Loss: 2.0053 Acc: 0.4549
     valid Loss: 1.5599 Acc: 0.5588
-    
+
     Epoch 7/14
     ----------
     train Loss: 1.9235 Acc: 0.4794
     valid Loss: 1.3756 Acc: 0.6265
-    
+
     Epoch 8/14
     ----------
     train Loss: 1.5538 Acc: 0.5990
     valid Loss: 1.1930 Acc: 0.6814
-    
+
     Epoch 9/14
     ----------
     train Loss: 1.3817 Acc: 0.6206
     valid Loss: 1.1466 Acc: 0.6863
-    
+
     Epoch 10/14
     ----------
     train Loss: 1.3306 Acc: 0.6520
     valid Loss: 1.1130 Acc: 0.6980
-    
+
     Epoch 11/14
     ----------
     train Loss: 1.3506 Acc: 0.6412
     valid Loss: 1.1032 Acc: 0.6941
-    
+
     Epoch 12/14
     ----------
     train Loss: 1.3369 Acc: 0.6382
     valid Loss: 1.0924 Acc: 0.6990
-    
+
     Epoch 13/14
     ----------
     train Loss: 1.2928 Acc: 0.6392
     valid Loss: 1.0696 Acc: 0.7020
-    
+
     Epoch 14/14
     ----------
     train Loss: 1.2130 Acc: 0.6471
     valid Loss: 1.0585 Acc: 0.7078
-    
+
     Training complete in 1m 15s
     Best val Acc: 0.707843
 
@@ -265,12 +264,12 @@ with torch.no_grad():
     else:
         print("Using CPU")
         device = torch.device("cpu")
-    
+
 
     for inputs, labels in dataloaders[phase]:
         inputs = inputs.to(device)
         labels = labels.to(device)        
-        
+
         outputs = model(inputs)
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
@@ -295,12 +294,12 @@ Remember that you'll want to completely rebuild the model later so you can use i
 
 
 ```python
-# Save a checkpoint 
+# Save a checkpoint
 model.class_to_idx = image_datasets['train'].class_to_idx
 
 checkpoint = {
     'arch': 'alexnet',
-    'class_to_idx': model.class_to_idx, 
+    'class_to_idx': model.class_to_idx,
     'state_dict': model.state_dict(),
     'hidden_units': 4096
 }
@@ -328,7 +327,7 @@ model.class_to_idx = checkpoint['class_to_idx']
 
 # Inference for classification
 
-Now you'll write a function to use a trained network for inference. That is, you'll pass an image into the network and predict the class of the flower in the image. Write a function called `predict` that takes an image and a model, then returns the top $K$ most likely classes along with the probabilities. It should look like 
+Now you'll write a function to use a trained network for inference. That is, you'll pass an image into the network and predict the class of the flower in the image. Write a function called `predict` that takes an image and a model, then returns the top $K$ most likely classes along with the probabilities. It should look like
 
 ```python
 probs, classes = predict(image_path, model)
@@ -338,17 +337,17 @@ print(classes)
 > ['70', '3', '45', '62', '55']
 ```
 
-First you'll need to handle processing the input image such that it can be used in your network. 
+First you'll need to handle processing the input image such that it can be used in your network.
 
 ## Image Preprocessing
 
-You'll want to use `PIL` to load the image ([documentation](https://pillow.readthedocs.io/en/latest/reference/Image.html)). It's best to write a function that preprocesses the image so it can be used as input for the model. This function should process the images in the same manner used for training. 
+You'll want to use `PIL` to load the image ([documentation](https://pillow.readthedocs.io/en/latest/reference/Image.html)). It's best to write a function that preprocesses the image so it can be used as input for the model. This function should process the images in the same manner used for training.
 
 First, resize the images where the shortest side is 256 pixels, keeping the aspect ratio. This can be done with the [`thumbnail`](http://pillow.readthedocs.io/en/3.1.x/reference/Image.html#PIL.Image.Image.thumbnail) or [`resize`](http://pillow.readthedocs.io/en/3.1.x/reference/Image.html#PIL.Image.Image.thumbnail) methods. Then you'll need to crop out the center 224x224 portion of the image.
 
 Color channels of images are typically encoded as integers 0-255, but the model expected floats 0-1. You'll need to convert the values. It's easiest with a Numpy array, which you can get from a PIL image like so `np_image = np.array(pil_image)`.
 
-As before, the network expects the images to be normalized in a specific way. For the means, it's `[0.485, 0.456, 0.406]` and for the standard deviations `[0.229, 0.224, 0.225]`. You'll want to subtract the means from each color channel, then divide by the standard deviation. 
+As before, the network expects the images to be normalized in a specific way. For the means, it's `[0.485, 0.456, 0.406]` and for the standard deviations `[0.229, 0.224, 0.225]`. You'll want to subtract the means from each color channel, then divide by the standard deviation.
 
 And finally, PyTorch expects the color channel to be the first dimension but it's the third dimension in the PIL image and Numpy array. You can reorder dimensions using [`ndarray.transpose`](https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.ndarray.transpose.html). The color channel needs to be first and retain the order of the other two dimensions.
 
@@ -360,20 +359,20 @@ def process_image(image):
         returns an Numpy array
     '''
     img_loader = transforms.Compose([
-        transforms.Resize(256), 
-        transforms.CenterCrop(224), 
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
         transforms.ToTensor()])
-    
+
     pil_image = Image.open(image)
     pil_image = img_loader(pil_image).float()
-    
+
     np_image = np.array(pil_image)    
-    
+
     mean = np.array([0.485, 0.456, 0.406])
     std = np.array([0.229, 0.224, 0.225])
     np_image = (np.transpose(np_image, (1, 2, 0)) - mean)/std    
     np_image = np.transpose(np_image, (2, 0, 1))
-            
+
     return np_image
 ```
 
@@ -385,21 +384,21 @@ def imshow(image, ax=None, title=None):
     """Imshow for Tensor."""
     if ax is None:
         fig, ax = plt.subplots()
-    
+
     # PyTorch tensors assume the color channel is the first dimension
     # but matplotlib assumes is the third dimension
     image = np.transpose(image, (1, 2, 0))
-    
+
     # Undo preprocessing
     mean = np.array([0.485, 0.456, 0.406])
     std = np.array([0.229, 0.224, 0.225])
     image = std * image + mean
-    
+
     # Image needs to be clipped between 0 and 1 or it looks like noise when displayed
     image = np.clip(image, 0, 1)
-    
+
     ax.imshow(image)
-    
+
     return ax
 ```
 
@@ -471,4 +470,3 @@ _ = axarr[1].set_xlabel('Probs')
 ```
 
 ![Prediction results](./assets/prediction_results.png)
-
